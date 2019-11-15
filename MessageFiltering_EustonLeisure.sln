@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageFiltering_EustonLeisure", "MessageFiltering_EustonLeisure\MessageFiltering_EustonLeisure.csproj", "{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFC7BE10-118A-4E31-912E-B999C6233919}
+	EndGlobalSection
+EndGlobal
