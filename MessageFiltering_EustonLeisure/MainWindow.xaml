@@ -7,9 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid>
-        <TextBox x:Name="tboxHeader" HorizontalAlignment="Left" Height="23" Margin="246,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274" MaxLength="10" IsUndoEnabled="True"/>
-        <TextBox x:Name="tboxBody" HorizontalAlignment="Left" Height="125" Margin="246,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274" AcceptsReturn="True" AcceptsTab="True"/>
-        <Button x:Name="btnProcess" Content="Process Message" HorizontalAlignment="Left" Margin="246,265,0,0" VerticalAlignment="Top" Width="274" Click="BtnProcess_Click"/>
+        <TextBox x:Name="tboxHeader" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274" MaxLength="10" IsUndoEnabled="True"/>
+        <TextBox x:Name="tboxBody" HorizontalAlignment="Left" Height="224" Margin="10,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274" AcceptsReturn="True" AcceptsTab="True"/>
+        <Button x:Name="btnProcess" Content="Process Message" HorizontalAlignment="Left" Margin="10,267,0,0" VerticalAlignment="Top" Width="274" Click="BtnProcess_Click"/>
+        <Button x:Name="btnMentionShow" Content="Show Mentions" HorizontalAlignment="Left" Margin="97,339,0,0" VerticalAlignment="Top" Width="130" Click="BtnMentionShow_Click"/>
 
     </Grid>
 </Window>
