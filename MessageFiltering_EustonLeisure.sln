@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageFiltering_EustonLeisure", "MessageFiltering_EustonLeisure\MessageFiltering_EustonLeisure.csproj", "{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{06CA709B-F1D2-4CC1-9200-5FC538E972DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0281A4-CE94-4FDF-B444-0EE2FF71FBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06CA709B-F1D2-4CC1-9200-5FC538E972DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06CA709B-F1D2-4CC1-9200-5FC538E972DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06CA709B-F1D2-4CC1-9200-5FC538E972DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06CA709B-F1D2-4CC1-9200-5FC538E972DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

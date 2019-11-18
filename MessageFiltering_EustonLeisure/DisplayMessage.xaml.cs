@@ -28,7 +28,7 @@ namespace MessageFiltering_EustonLeisure
             tboxSender.Text = m.Sender;
             tboxBody.Text = m.Body;
 
-            MessageBox.Show(m.GetType().ToString());
+            //MessageBox.Show(m.GetType().ToString());
 
             switch (m.GetType().ToString())
             {

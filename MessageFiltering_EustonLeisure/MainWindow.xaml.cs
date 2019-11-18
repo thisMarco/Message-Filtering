@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic.FileIO;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace MessageFiltering_EustonLeisure
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    // Marco Picchillo 40340891
+
     public partial class MainWindow : Window
     {
         List<Mention> mentionsList = new List<Mention>();
@@ -29,6 +18,7 @@ namespace MessageFiltering_EustonLeisure
         int nOfQuarantined = 0;
         string[,] abbreviations = new string[256,2];
         int nOfAbbreviations = 0;
+        
         List<Message> messagesList = new List<Message>();
         List<SIRListEntry> SIRList = new List<SIRListEntry>();
         public MainWindow()
@@ -39,9 +29,9 @@ namespace MessageFiltering_EustonLeisure
 
         private void BtnProcess_Click(object sender, RoutedEventArgs e)
         {
-            if (RegexCheck("((?:[S|E|T|s|e|t]+[0-9]{9}))", tboxHeader.Text))
+            if (RegexCheck("((?:[S|E|T]+[0-9]{9}))", tboxHeader.Text.ToUpper()))
             {
-                string confirmedHeader = tboxHeader.Text;
+                string confirmedHeader = tboxHeader.Text.ToUpper();
                 switch (confirmedHeader[0])
                 {
                     case 'S':
@@ -59,32 +49,15 @@ namespace MessageFiltering_EustonLeisure
                                     MessageBox.Show("ERROR\n\nInvalid Sender Number!", "Sender Number Error", MessageBoxButton.OK, MessageBoxImage.Error);
                                     break;
                                 }
-                                messagesList.Add(new Message(tboxHeader.Text, senderNumber, body, ref abbreviations, ref nOfAbbreviations));
+                                ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
+                                messagesList.Add(new Message(tboxHeader.Text, senderNumber, body));
+                                UploadToFile(messagesList.Last());
+
                                 DisplaySelectedMessage(messagesList.Last());
                             }
                             else
                                 BodyOutOfLimit(140);
-
-                            //string body = tboxBody.Text;
-
-                            //if (RegexCheck(@"^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}", body))
-                            //{
-                            //    string senderNumber = ExtractMatch(@"^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}", body);
-
-                            //    //int startIndexPN = body.IndexOf(senderNumber);
-                            //    //int lengthOfPN = senderNumber.Length;
-
-                            //    //body = body.Remove(startIndexPN, lengthOfPN);
-
-                            //    body = EditBody(body, senderNumber);
-
-                            //    if (MessageLegthLimit(body, 140))
-                            //        ExpandAbbreviation(ref body, abbrevations, nOfAbbreviations);
-                            //    else
-                            //        BodyOutOfLimit(140);
-                            //}
-                            //else
-                            //    MessageBox.Show("Invalid SMS Body Format\n\nValid Format: [SENDER NUMBER][BODY]");
+                            
                             break;
                         }
 
@@ -113,9 +86,15 @@ namespace MessageFiltering_EustonLeisure
 
                                     if (ValidIncidentNature(incidentNat))
                                     {
-                                        messagesList.Add(new IncidentEmail(tboxHeader.Text, senderEmail, IncidentReportSIR, CentreCode, incidentNat, body, ref abbreviations, ref nOfAbbreviations, ref quarantineed, ref nOfQuarantined));
+                                        ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
+                                        QuarantineList(body, ref quarantineed, ref nOfQuarantined);
+                                        QuarantineURLs(ref body);
                                         SIRList.Add(new SIRListEntry(CentreCode, incidentNat));
+
+                                        messagesList.Add(new IncidentEmail(tboxHeader.Text, senderEmail, IncidentReportSIR, CentreCode, incidentNat, body));
                                         
+                                        UploadToFile(messagesList.Last());
+
                                         validFormat = true;
                                     }
                                     else
@@ -128,7 +107,14 @@ namespace MessageFiltering_EustonLeisure
 
                                     if (subject.Length <= 20)
                                     {
-                                        messagesList.Add(new Email(tboxHeader.Text, senderEmail, subject, body, ref abbreviations, ref nOfAbbreviations, ref quarantineed, ref nOfQuarantined));
+                                        ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
+                                        QuarantineList(body, ref quarantineed, ref nOfQuarantined);
+                                        QuarantineURLs(ref body);
+
+                                        messagesList.Add(new Email(tboxHeader.Text, senderEmail, subject, body));
+
+                                        UploadToFile(messagesList.Last());
+
                                         validFormat = true;
                                     }
                                     else
@@ -138,20 +124,7 @@ namespace MessageFiltering_EustonLeisure
                                 if (validFormat)                                 
                                     DisplaySelectedMessage(messagesList.Last());
                                 else
-                                    MessageBox.Show("Invalid Message Format for Email!", "Email Format Error", MessageBoxButton.OK,MessageBoxImage.Error);
-
-                                //if (RegexCheck(@"^?((\d{2})+(-)+(\d{3})+(-)+(\d{2}))", body))
-                                //{
-                                //    string incidentCode = ExtractMatch(@"^?((\d{2})+(-)+(\d{3})+(-)+(\d{2}))", body);
-                                //    body = EditBody(body, incidentCode);
-
-                                //    if (MessageLegthLimit(body, 1028))
-                                //    {
-                                //        ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
-                                //        QuarantineURLs(ref body);
-                                //    }
-                                //    else
-                                //        BodyOutOfLimit(1028);                                }
+                                    MessageBox.Show("Invalid Message Format for Email!", "Email Format Error", MessageBoxButton.OK,MessageBoxImage.Error);                                                                
                             }
                             else
                                 MessageBox.Show("Invalid EMAIL Body Format\n\nValid Format: [SENDER EMAIL][BODY]"); //TO BE FIXED
@@ -168,7 +141,14 @@ namespace MessageFiltering_EustonLeisure
 
                                 if (MessageLegthLimit(body, 140))
                                 {
-                                    messagesList.Add(new Tweet(tboxHeader.Text, tweetAuthor, body, ref abbreviations, ref nOfAbbreviations, ref mentionsList, ref trendingList));
+                                    ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
+                                    UpdateList(body, ref trendingList, @"(#)\w+");
+                                    UpdateList(body, ref mentionsList, @"(@)+(\w){1,15}");
+
+                                    messagesList.Add(new Tweet(tboxHeader.Text, tweetAuthor, body));   
+
+                                    UploadToFile(messagesList.Last());
+
                                     DisplaySelectedMessage(messagesList.Last());
                                 }                                    
                                 else
@@ -248,45 +228,7 @@ namespace MessageFiltering_EustonLeisure
                     i++;
                 }
             }
-        }
-
-        //private void ExpandAbbreviation(ref string message, string[,] abbreviations, int nAbb)
-        //{
-        //    for(int i = 0; i < nAbb; i++)
-        //    {
-        //        //int count = 0;
-        //        //int start = 0;
-        //        //int end = message.Length;
-        //        //int indexOfAbbreviation = 0;
-
-        //        //string abb = (@"(?<![\w])" + abbrevations[i, 0] + @"(?![\w])");
-        //        //string replacement = string.Format("$& {0}",abbrevations[i,1]);
-        //        //message = Regex.Replace(message, abb, replacement);
-
-        //        Regex abb = new Regex(@"(?<![\w])" + abbreviations[i, 0] + @"(?![\w])", RegexOptions.IgnoreCase);
-        //        foreach (Match m in abb.Matches(message))
-        //            message = message.Insert(m.Index + abbreviations[i, 0].Length, string.Format(" <{0}> ", abbreviations[i, 1]));
-
-        //        //while ((start < end) && (indexOfAbbreviation > -1))
-        //        //{
-        //        //    count = message.Length - start;
-        //        //    if (Regex.IsMatch(message, string.Format(@"\b{0}\b", abbrevations[i, 0])))
-        //        //    {
-        //        //        indexOfAbbreviation = message.IndexOf(abbreviations[i, 0], start, count);
-        //        //        if (indexOfAbbreviation == -1)
-        //        //            break;
-        //        //        else
-        //        //        {
-        //        //            message = message.Insert(indexOfAbbreviation + abbreviations[i, 0].Length, string.Format(" <{0}> ", abbreviations[i, 1]));
-        //        //        }
-        //        //    }
-
-        //        //    start = indexOfAbbreviation + abbrevations[i, 0].Length + abbrevations[i, 1].Length + 3;
-        //        //    end = message.Length;
-        //        //}
-        //    }
-        //    //MessageBox.Show(string.Format("Updated Body: {0}",message));
-        //}        
+        }                       
 
         private void BodyOutOfLimit(int limit)
         {
@@ -328,31 +270,68 @@ namespace MessageFiltering_EustonLeisure
 
         }
 
-        //private bool HeaderCheck(string header)
-        //{
-        //    string headerPattern = "((?:[S|E|T|s|e|t]+[0-9]{9}))";
-        //    Regex r = new Regex(headerPattern);
+        protected void ExpandAbbreviation(ref string message, string[,] abbs, int nAbb)
+        {
+            for (int i = 0; i < nAbb; i++)
+            {
+                Regex anAbbreviation = new Regex(@"(?<![\w])" + abbs[i, 0] + @"(?![\w])", RegexOptions.IgnoreCase);
+                foreach (Match m in anAbbreviation.Matches(message))
+                    message = message.Insert(m.Index + abbs[i, 0].Length, string.Format(" <{0}> ", abbs[i, 1]));
+            }
+        }
 
-        //    Match headerMatch = r.Match(header);
+        private void UpdateList(string body, ref List<Mention> trendingL, string pattern)
+        {
+            //Regex hashtag = new Regex(@"(@)+(\w){1,15}");//(?<=@)(\w){1,15}");//@"@?(\w){1,15}");
+            Regex mention = new Regex(pattern);
+            foreach (Match mtc in mention.Matches(body))
+            {
+                bool alreadyMentioned = false;
+                foreach (Mention m in trendingL)
+                {
+                    if (mtc.Value.ToString() == m.MentionText)
+                    {
+                        m.Occurrences++;
+                        alreadyMentioned = true;
+                        break;
+                    }
+                }
+                if (!alreadyMentioned)
+                    trendingL.Add(new Mention(mtc.Value.ToString()));
+            }
+        }
+        protected void QuarantineURLs(ref string message)
+        {
+            string URL = (@"(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)");
+            string replacement = ("<URL Quarantined>");
+            message = Regex.Replace(message, URL, replacement);
+        }
 
-        //    if (!headerMatch.Success)
-        //    {
-        //        MessageBox.Show("Invalid Header");
-        //        return false;
-        //    }
-        //    return true;            
-        //}
+        private void QuarantineList(string body, ref string[] quarantineed, ref int nOfQuarantineed)
+        {
+            Regex URL = new Regex(@"(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)");
+            foreach (Match m in URL.Matches(body))
+            {
+                bool alreadyQuarantineed = false;
+                for (int i = 0; i < nOfQuarantineed; i++)
+                {
+                    if (m.Value.ToString() == quarantineed[i])
+                        alreadyQuarantineed = true;
+                }
+                if (!alreadyQuarantineed)
+                {
+                    quarantineed[nOfQuarantineed] = m.Value.ToString();
+                    nOfQuarantineed++;
+                }
+            }
+        }
+        private void UploadToFile(Message m)
+        {
+            string json = JsonConvert.SerializeObject(m);
+            MessageBox.Show(json);
 
-        //private string PhoneNumberCheck(string body)
-        //{
-        //    string phoneNumber = @"^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}";
-        //    Regex r = new Regex(phoneNumber);
-
-        //    Match phoneMatch = r.Match(tboxBody.Text);
-        //    if (phoneMatch.Success)
-        //        return phoneMatch.ToString();
-        //    return ("INVALID");
-        //}
+            File.AppendAllText("ProcessedMessage.json", json);
+        }
     }
     
 }
