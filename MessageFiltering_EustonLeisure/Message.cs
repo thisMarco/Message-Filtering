@@ -5,8 +5,9 @@ namespace MessageFiltering_EustonLeisure
     public class Message
     {
         public string Header;
-        public string Body;
         public string Sender;
+        public string Body;
+        
 
         //Contructor
         public Message(string header, string sender, string body)

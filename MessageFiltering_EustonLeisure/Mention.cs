@@ -10,5 +10,10 @@
             MentionText = user;
             Occurrences = 1;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} Occurrences: {1}", Occurrences, MentionText);
+        }
     }
 }

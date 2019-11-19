@@ -5,21 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessageFiltering_EustonLeisure"
         mc:Ignorable="d"
-        Title="DisplyMessage" Height="270" Width="800" ResizeMode="NoResize" WindowStyle="None">
-    <Grid>
-        <TextBlock x:Name="tblockHeader" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Header:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right"/>
-        <TextBlock x:Name="tblockSender" HorizontalAlignment="Left" Margin="10,40,0,0" TextWrapping="Wrap" Text="Sender:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right"/>
-        <TextBlock x:Name="tblockSubject" HorizontalAlignment="Left" Margin="10,70,0,0" TextWrapping="Wrap" Text="Subject:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right"/>
-        <TextBlock x:Name="tblockCode" HorizontalAlignment="Left" Margin="10,100,0,0" TextWrapping="Wrap" Text="Centre Code:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right"/>
-        <TextBlock x:Name="tblockIncident" HorizontalAlignment="Left" Margin="10,130,0,0" TextWrapping="Wrap" Text="Nature of Incident:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right"/>
-        <TextBox x:Name="tboxHeader" HorizontalAlignment="Left" Height="23" Margin="135,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
-        <TextBox x:Name="tboxSender" HorizontalAlignment="Left" Height="23" Margin="135,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
-        <TextBox x:Name="tboxSubject" HorizontalAlignment="Left" Height="23" Margin="135,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
-        <TextBox x:Name="tboxCode" HorizontalAlignment="Left" Height="23" Margin="135,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
-        <TextBox x:Name="tboxIncident" HorizontalAlignment="Left" Height="23" Margin="135,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
-        <TextBox x:Name="tboxBody" HorizontalAlignment="Left" Height="221" Margin="300,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="490"/>
-        <TextBlock x:Name="tblockMessage" HorizontalAlignment="Left" Margin="300,10,0,0" TextWrapping="Wrap" Text="Message:" VerticalAlignment="Top" Width="490" FontWeight="Bold"/>
-        <Button x:Name="btnClose" Content="Close Page" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top" Width="75" Click="BtnClose_Click"/>
+        Title="DisplyMessage" Height="320" Width="800" ResizeMode="NoResize" WindowStyle="None">
+    <Grid Background="#FF2768BA">
+        <TextBlock x:Name="tblockHeader" HorizontalAlignment="Left" Margin="9,56,0,0" TextWrapping="Wrap" Text="Header:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>
+        <TextBlock x:Name="tblockSender" HorizontalAlignment="Left" Margin="9,87,0,0" TextWrapping="Wrap" Text="Sender:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>
+        <TextBlock x:Name="tblockSubject" HorizontalAlignment="Left" Margin="9,116,0,0" TextWrapping="Wrap" Text="Subject:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>
+        <TextBlock x:Name="tblockCode" HorizontalAlignment="Left" Margin="9,147,0,0" TextWrapping="Wrap" Text="Centre Code:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>
+        <TextBlock x:Name="tblockIncident" HorizontalAlignment="Left" Margin="9,176,0,0" TextWrapping="Wrap" Text="Nature of Incident:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>
+        <TextBox x:Name="tboxHeader" HorizontalAlignment="Left" Height="23" Margin="134,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
+        <TextBox x:Name="tboxSender" HorizontalAlignment="Left" Height="23" Margin="134,86,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
+        <TextBox x:Name="tboxSubject" HorizontalAlignment="Left" Height="23" Margin="134,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
+        <TextBox x:Name="tboxCode" HorizontalAlignment="Left" Height="23" Margin="134,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
+        <TextBox x:Name="tboxIncident" HorizontalAlignment="Left" Height="23" Margin="134,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text=""/>
+        <TextBox x:Name="tboxBody" HorizontalAlignment="Left" Height="221" Margin="300,86,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="490"/>
+        <TextBlock x:Name="tblockMessage" HorizontalAlignment="Left" Margin="300,56,0,0" TextWrapping="Wrap" Text="Message:" VerticalAlignment="Top" Width="490" FontWeight="Bold" Foreground="White"/>
+        <Button x:Name="btnClose" Content="Close Page" HorizontalAlignment="Left" Margin="9,288,0,0" VerticalAlignment="Top" Width="270" Click="BtnClose_Click"/>
+        <TextBlock x:Name="tblockTitle" HorizontalAlignment="Left" Margin="150,10,0,0" TextWrapping="Wrap" Text="Euston Leisure Message Filtering Service" VerticalAlignment="Top" Width="500" FontWeight="Bold" TextAlignment="Center" Foreground="White" FontSize="20" FontFamily="Courier New"/>
 
     </Grid>
 </Window>
