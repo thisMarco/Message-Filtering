@@ -17,7 +17,7 @@
         <ListBox x:Name="lboxMentions" HorizontalAlignment="Left" Height="170" Margin="460,120,0,0" VerticalAlignment="Top" Width="170"/>
         <ListBox x:Name="lboxTrending" HorizontalAlignment="Left" Height="170" Margin="460,317,0,0" VerticalAlignment="Top" Width="170"/>
         <TextBlock x:Name="tblockTitle" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Euston Leisure Message Filtering Service" VerticalAlignment="Top" Width="874" FontWeight="Bold" TextAlignment="Center" Foreground="White" FontSize="20" FontFamily="Courier New"/>
-        <TextBlock HorizontalAlignment="Left" Margin="776,510,0,0" TextWrapping="Wrap" Text="Marco Picchillo" VerticalAlignment="Top" FontWeight="Bold" TextAlignment="Center" Foreground="White" FontFamily="Courier New" Width="108"/>
+        <TextBlock HorizontalAlignment="Left" Margin="772,510,0,0" TextWrapping="Wrap" Text="Marco Picchillo" VerticalAlignment="Top" FontWeight="Bold" TextAlignment="Center" Foreground="White" FontFamily="Courier New" Width="108"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,38,0,0" TextWrapping="Wrap" Text="Message Header" VerticalAlignment="Top" Width="110" Foreground="White" FontWeight="Bold" FontSize="14"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,95,0,0" TextWrapping="Wrap" Text="Message Body" VerticalAlignment="Top" Width="110" Foreground="White" FontWeight="Bold" FontSize="14"/>
         <TextBlock HorizontalAlignment="Left" Margin="300,96,0,0" TextWrapping="Wrap" Text="Messages List" VerticalAlignment="Top" Width="92" Foreground="White" FontWeight="Bold" FontSize="14"/>

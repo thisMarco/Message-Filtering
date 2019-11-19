@@ -35,146 +35,7 @@ namespace MessageFiltering_EustonLeisure
             lboxMessages.ItemsSource = messagesList.Keys;
             //Load Abbreviation from file
             LoadTextAbbreviation(ref abbreviations, ref nOfAbbreviations);
-        }
-
-        private void BtnProcess_Click(object sender, RoutedEventArgs e)
-        {
-            if (RegexCheck("((?:[S|E|T]+[0-9]{9}))", tboxHeader.Text.ToUpper()))
-            {
-                if (!messagesList.ContainsKey(tboxHeader.Text))
-                {
-                    string confirmedHeader = tboxHeader.Text.ToUpper();
-                    switch (confirmedHeader[0])
-                    {
-                        case 'S':
-                            {
-                                if (MessageLegthLimit(tboxBody.Text, 140))
-                                {
-                                    string senderNumber;
-                                    string RegexPhone = @"^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}";
-                                    string body = tboxBody.Text;
-
-                                    if (RegexCheck(RegexPhone, body))
-                                        senderNumber = ExtractMatch(RegexPhone, ref body);
-                                    else
-                                    {
-                                        MessageBox.Show("ERROR\n\nInvalid Sender Number!", "Sender Number Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                                        break;
-                                    }
-
-                                    ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
-                                    messagesList.Add(tboxHeader.Text, new Message(tboxHeader.Text, senderNumber, body));
-                                    lboxMessages.Items.Refresh();
-
-                                    messagesUnsaved = true;
-                                }
-                                else
-                                    BodyOutOfLimit(140);
-
-                                break;
-                            }
-
-                        case 'E':
-                            {
-                                string body = tboxBody.Text;
-                                string regexEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                                                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))";
-
-                                if (RegexCheck(regexEmail, body))
-                                {                                    
-                                    string senderEmail = ExtractMatch(regexEmail, ref body);
-
-                                    string RegexSIR = @"(SIR (0[1-9]|1[0-9]|2[0-9]|3[0-1])[\/](0[1-9]|1[0-2])[\/](0[0-9]|1[0-9]|2[0-9]))";
-
-                                    if (RegexCheck(RegexSIR, body))
-                                    {
-                                        string IncidentReportSIR = ExtractMatch(RegexSIR, ref body);
-
-                                        string RegexCentreCode = @"(\d\d)+(-)+(\d\d\d)+(-)+(\d\d)";
-                                        string CentreCode = ExtractMatch(RegexCentreCode, ref body);
-
-                                        string incidentNat = new StringReader(body).ReadLine();
-                                        body = EditBody(body, incidentNat);
-
-                                        if (ValidIncidentNature(incidentNat))
-                                        {
-                                            ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
-                                            QuarantineList(body, ref quarantineed, ref nOfQuarantined);
-                                            QuarantineURLs(ref body);
-                                            SIRList.Add(new SIRListEntry(CentreCode, incidentNat));
-                                            lboxSIR.Items.Add(SIRList.Last().ToString());
-                                            messagesList.Add(tboxHeader.Text, new IncidentEmail(tboxHeader.Text, senderEmail, IncidentReportSIR, CentreCode, incidentNat, body));
-                                            messagesUnsaved = true;
-                                            lboxMessages.Items.Refresh();                                            
-                                        }
-                                        else
-                                            MessageBox.Show("Invalid Nature of Incident Found!", "Invalid Nature of Incident", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    }
-                                    else
-                                    {
-                                        string subject = new StringReader(body).ReadLine();
-                                        body = EditBody(body, subject);
-
-                                        if (subject.Length <= 20)
-                                        {
-                                            ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
-                                            QuarantineList(body, ref quarantineed, ref nOfQuarantined);
-                                            QuarantineURLs(ref body);
-
-                                            messagesList.Add(tboxHeader.Text, new Email(tboxHeader.Text, senderEmail, subject, body));
-                                            messagesUnsaved = true;
-                                            lboxMessages.Items.Refresh();
-
-                                            //validFormat = true;
-                                        }
-                                        else
-                                            MessageBox.Show("Invalid Subject Lenght!", "Invalid Subject", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    }
-                                }
-                                else
-                                    MessageBox.Show("Invalid Message Format for Email!", "Email Format Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                                break;
-                            }
-                        case 'T':
-                            {
-                                string body = tboxBody.Text;
-
-                                if (RegexCheck(@"^@?(\w){1,15}", body))
-                                {
-                                    string tweetAuthor = ExtractMatch(@"^@?(\w){1,15}", ref body);
-
-                                    if (MessageLegthLimit(body, 140))
-                                    {
-                                        ExpandAbbreviation(ref body, abbreviations, nOfAbbreviations);
-                                        UpdateList(body, ref trendingList, @"(#)\w+");
-                                        UpdateList(body, ref mentionsList, @"(@)+(\w){1,15}");
-
-                                        messagesList.Add(tboxHeader.Text, new Tweet(tboxHeader.Text, tweetAuthor, body));
-                                        messagesUnsaved = true;
-                                        lboxMessages.Items.Refresh();
-
-                                        if (mentionsList.Count > 0 || trendingList.Count > 0)
-                                            UpdateMentionTrending();
-
-                                    }
-                                    else
-                                        BodyOutOfLimit(140);
-                                }
-                                else
-                                    MessageBox.Show("Tweet Author not Found!", "Author Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                                break;
-                            }
-                    }                    
-                }
-                else
-                    MessageBox.Show("There is already a message with this Header Value!", "Recurring Header", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                
-            }
-            else
-                MessageBox.Show("Invalid Header Format!");
-        }
+        }        
 
         #region Validation
         private bool RegexCheck(string pattern, string message)
@@ -209,6 +70,170 @@ namespace MessageFiltering_EustonLeisure
         private void BodyOutOfLimit(int limit)
         {
             MessageBox.Show(string.Format("The body of the message exceed the characters limit [{0}]!", limit));
+        }
+        #endregion
+
+        #region Process Messages
+        private void BtnProcess_Click(object sender, RoutedEventArgs e)
+        {
+            if (RegexCheck("((?:[S|E|T]+[0-9]{9}))", tboxHeader.Text.ToUpper()))
+            {
+                if (ProcessMessage(tboxHeader.Text, tboxBody.Text))
+                {
+                    tboxHeader.Text = string.Empty;
+                    tboxBody.Text = string.Empty;
+                }
+            }
+            else
+                MessageBox.Show("Invalid Header Format!");
+        }
+
+        public bool ProcessMessage(string h, string b)
+        {
+            h = h.ToUpper();
+            if (RegexCheck("((?:[S|E|T]+[0-9]{9}))", h))
+            {
+                if (!messagesList.ContainsKey(h))
+                {                    
+                    switch (h[0])
+                    {
+                        case 'S':
+                            {
+                                return (ProcessSMS(h, b));
+                            }
+
+                        case 'E':
+                            {
+                                return (ProcessEmail(h, b));
+                            }
+                        case 'T':
+                            {
+                                return (ProcessTweet(h, b));
+                            }
+                    }
+                }
+                else
+                    MessageBox.Show("There is already a message with this Header Value!", "Recurring Header", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else
+                MessageBox.Show("{0} is an incorrect header format", "Header Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+
+        public bool ProcessSMS(string h, string b)
+        {
+            string RegexPhone = @"^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}";
+            if (RegexCheck(RegexPhone, b))
+            {                
+                string senderNumber = ExtractMatch(RegexPhone, ref b);
+
+                if (MessageLegthLimit(b, 140))
+                {                    
+                    ExpandAbbreviation(ref b, abbreviations, nOfAbbreviations);
+                    messagesList.Add(h, new Message(h, senderNumber, b));
+                    lboxMessages.Items.Refresh();
+                    messagesUnsaved = true;
+                    return true;
+                }                    
+                else
+                    BodyOutOfLimit(140);
+            }
+            else
+                MessageBox.Show("Invalid Sender Number!", "Sender Number Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return false;
+        }
+
+        public bool ProcessEmail(string h, string b)
+        {
+            string regexEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))";
+
+            if (RegexCheck(regexEmail, b))
+            {
+                string senderEmail = ExtractMatch(regexEmail, ref b);
+
+                string RegexSIR = @"(SIR (0[1-9]|1[0-9]|2[0-9]|3[0-1])[\/](0[1-9]|1[0-2])[\/](0[0-9]|1[0-9]|2[0-9]))";
+
+                if (RegexCheck(RegexSIR, b))
+                {
+                    string IncidentReportSIR = ExtractMatch(RegexSIR, ref b);
+
+                    string RegexCentreCode = @"(\d\d)+(-)+(\d\d\d)+(-)+(\d\d)";
+                    string CentreCode = ExtractMatch(RegexCentreCode, ref b);
+
+                    string incidentNat = new StringReader(b).ReadLine();
+                    b = EditBody(b, incidentNat);
+
+                    if (ValidIncidentNature(incidentNat))
+                    {
+                        ExpandAbbreviation(ref b, abbreviations, nOfAbbreviations);
+                        QuarantineList(b, ref quarantineed, ref nOfQuarantined);
+                        QuarantineURLs(ref b);
+
+                        SIRList.Add(new SIRListEntry(CentreCode, incidentNat));
+                        lboxSIR.Items.Add(SIRList.Last().ToString());
+
+                        messagesList.Add(h, new IncidentEmail(h, senderEmail, IncidentReportSIR, CentreCode, incidentNat, b));
+                        messagesUnsaved = true;
+                        lboxMessages.Items.Refresh();
+                        return true;
+                    }
+                    else
+                        MessageBox.Show("Invalid Nature of Incident Found!", "Invalid Nature of Incident", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    string subject = new StringReader(b).ReadLine();
+                    b = EditBody(b, subject);
+
+                    if (subject.Length <= 20)
+                    {
+                        ExpandAbbreviation(ref b, abbreviations, nOfAbbreviations);
+                        QuarantineList(b, ref quarantineed, ref nOfQuarantined);
+                        QuarantineURLs(ref b);
+
+                        messagesList.Add(h, new Email(h, senderEmail, subject, b));
+                        messagesUnsaved = true;
+                        lboxMessages.Items.Refresh();
+                        return true;
+                    }
+                    else
+                        MessageBox.Show("Invalid Subject!\nSubject must be <= 20 characters.", "Invalid Subject", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+                MessageBox.Show("Invalid Sender's Email", "Email Format Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+
+        public bool ProcessTweet(string h, string b)
+        {
+            if (RegexCheck(@"^@?(\w){1,15}", b))
+            {
+                string tweetAuthor = ExtractMatch(@"^@?(\w){1,15}", ref b);
+
+                if (MessageLegthLimit(b, 140))
+                {
+                    ExpandAbbreviation(ref b, abbreviations, nOfAbbreviations);
+                    UpdateList(b, ref trendingList, @"(#)\w+");
+                    UpdateList(b, ref mentionsList, @"(@)+(\w){1,15}");
+
+                    messagesList.Add(h, new Tweet(h, tweetAuthor, b));
+                    messagesUnsaved = true;
+                    lboxMessages.Items.Refresh();
+
+                    if (mentionsList.Count > 0 || trendingList.Count > 0)
+                        UpdateMentionTrending();
+
+                    return true;
+                }
+                else
+                    BodyOutOfLimit(140);
+            }
+            else
+                MessageBox.Show("Tweet Author not Found!", "Author Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
         }
         #endregion
 
@@ -306,9 +331,10 @@ namespace MessageFiltering_EustonLeisure
         #region UIUpdate
         public void UpdateMentionTrending()
         {
-            if (mentionsList.Count > 1)
+            if (mentionsList.Count > 0)
             {
                 mentionsList.Sort((x, y) => x.Occurrences.CompareTo(y.Occurrences));
+                mentionsList.Reverse();
                 lboxMentions.Items.Refresh();
 
                 lboxMentions.Items.Clear();
@@ -317,9 +343,10 @@ namespace MessageFiltering_EustonLeisure
                     lboxMentions.Items.Add(m.ToString());
             }
 
-            if (trendingList.Count > 1)
+            if (trendingList.Count > 0)
             {
                 trendingList.Sort((x, y) => x.Occurrences.CompareTo(y.Occurrences));
+                trendingList.Reverse();
                 lboxTrending.Items.Refresh();
 
                 lboxTrending.Items.Clear();
@@ -358,14 +385,55 @@ namespace MessageFiltering_EustonLeisure
 
         private void BtnSaveMessages_Click(object sender, RoutedEventArgs e)
         {
-            string json = JsonConvert.SerializeObject(messagesList, Formatting.Indented);
+            string processedMessages = JsonConvert.SerializeObject(messagesList, Formatting.Indented);
             string filename = string.Format("Euston Leisure{0}.json", DateTime.UtcNow.ToString("ddMMyyyy_HHmmss"));
 
-            File.WriteAllText(filename, json);
+            File.WriteAllText(filename, processedMessages);
             messagesUnsaved = false;
             MessageBox.Show("Messages Correctly Saved");
-        }
+        }        
 
+        private void BtnLoadFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            openFileDialog.Multiselect = false;
+            openFileDialog.Filter = "JSON files (*.json)|*.json";//|All files (*.*)|*.*";
+
+            try
+            {
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string messages = File.ReadAllText(openFileDialog.FileName);
+                    Dictionary<string, Message> loadedMessages = JsonConvert.DeserializeObject<Dictionary<string, Message>>(messages);
+
+                    int loadCount = 0;
+                    foreach (KeyValuePair<string, Message> m in loadedMessages)
+                    {
+                        if (ProcessMessage(m.Key, m.Value.Body))
+                            loadCount++;
+                    }
+
+                    if (loadCount >= 0 && loadedMessages.Count > 0)
+                        MessageBox.Show(string.Format("{0} Messages Loaded.\n{1} Unloaded.", loadCount, loadedMessages.Count - loadCount), "Load Information", MessageBoxButton.OK, MessageBoxImage.Information);  
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Something Went Wrong!\nTry with a valid file.", "Invalid File Format", MessageBoxButton.OK, MessageBoxImage.Error);
+            }           
+        }
+        #endregion
+
+        #region DisplayMessage
+        private void LboxMessages_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            DisplayMessage displayMessage = new DisplayMessage(messagesList[lboxMessages.SelectedItem.ToString()]);
+            displayMessage.ShowDialog();
+        }
+        #endregion
+
+        #region Others
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             if (!messagesUnsaved || messagesList.Count() == 0)
@@ -380,34 +448,6 @@ namespace MessageFiltering_EustonLeisure
             }
         }
 
-        private void BtnLoadFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-            openFileDialog.Multiselect = false;
-            openFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-            //openFileDialog.ShowDialog();
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                //string jsonString = File.ReadAllText(openFileDialog.FileName);
-                //dynamic messages = JsonConvert.DeserializeObject(jsonString);
-
-                //List<Message> loadedMessages = new List<Message>();
-                //foreach (var m in messages)
-                //    loadedMessages.Add(m as Message);
-
-                //List<Message> loadedMessages = JsonConvert.DeserializeObject<List<Message>>(File.ReadAllText(openFileDialog.FileName));
-            }
-        }
-        #endregion
-
-        #region DisplayMessage
-        private void LboxMessages_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            DisplayMessage displayMessage = new DisplayMessage(messagesList[lboxMessages.SelectedItem.ToString()]);
-            displayMessage.ShowDialog();
-        }
         #endregion
     }
 
