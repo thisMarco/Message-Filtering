@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
-namespace MessageFiltering_EustonLeisure
+﻿namespace MessageFiltering_EustonLeisure
 {
     class Tweet : Message
     {

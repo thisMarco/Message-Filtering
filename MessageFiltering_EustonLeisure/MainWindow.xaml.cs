@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -38,7 +37,7 @@ namespace MessageFiltering_EustonLeisure
         }        
 
         #region Validation
-        private bool RegexCheck(string pattern, string message)
+        public bool RegexCheck(string pattern, string message)
         {
             Regex r = new Regex(pattern);
             Match regexMatch = r.Match(message);
@@ -48,7 +47,7 @@ namespace MessageFiltering_EustonLeisure
             return false;
         }
 
-        private bool ValidIncidentNature(string inc)
+        public bool ValidIncidentNature(string inc)
         {
             string[] eachIncident = System.IO.File.ReadAllLines("IncidentsList.txt");
 
@@ -358,9 +357,9 @@ namespace MessageFiltering_EustonLeisure
         #endregion
 
         #region SaveLoad Files
-        private void LoadTextAbbreviation(ref string[,] textAbb, ref int nAbb)
+        public void LoadTextAbbreviation(ref string[,] textAbb, ref int nAbb)
         {
-            var fileLocation = @"TextWords.csv"; // Habeeb, "Dubai Media City, Dubai"
+            var fileLocation = @"TextWords.csv";
             using (TextFieldParser cvsFile = new TextFieldParser(fileLocation))
             {
                 //Set FiledDelimiter
@@ -390,7 +389,7 @@ namespace MessageFiltering_EustonLeisure
 
             File.WriteAllText(filename, processedMessages);
             messagesUnsaved = false;
-            MessageBox.Show("Messages Correctly Saved");
+            MessageBox.Show(string.Format("Messages Correctly Saved\nFIleName: {0}", filename));
         }        
 
         private void BtnLoadFile_Click(object sender, RoutedEventArgs e)
@@ -405,17 +404,16 @@ namespace MessageFiltering_EustonLeisure
                 if (openFileDialog.ShowDialog() == true)
                 {
                     string messages = File.ReadAllText(openFileDialog.FileName);
-                    Dictionary<string, Message> loadedMessages = JsonConvert.DeserializeObject<Dictionary<string, Message>>(messages);
 
                     int loadCount = 0;
+                    Dictionary<string, Message> loadedMessages = JsonConvert.DeserializeObject<Dictionary<string, Message>>(messages);
                     foreach (KeyValuePair<string, Message> m in loadedMessages)
                     {
                         if (ProcessMessage(m.Key, m.Value.Body))
                             loadCount++;
                     }
-
                     if (loadCount >= 0 && loadedMessages.Count > 0)
-                        MessageBox.Show(string.Format("{0} Messages Loaded.\n{1} Unloaded.", loadCount, loadedMessages.Count - loadCount), "Load Information", MessageBoxButton.OK, MessageBoxImage.Information);  
+                        MessageBox.Show(string.Format("{0} Messages Loaded.\n{1} Unloaded.", loadCount, loadedMessages.Count - loadCount), "Load Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch
