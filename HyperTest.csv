@@ -1,0 +1,8 @@
+link,expected
+https://www.google.com/,TRUE
+https://www.youtube.com/,TRUE
+https://www.napier.ac.uk/,TRUE
+https://en.wikipedia.org/wiki/Edinburgh_Napier_University,TRUE
+facebook.com,TRUE
+,FALSE
+m.picchillo@yahoo.com,FALSE

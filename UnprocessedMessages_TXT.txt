@@ -1,0 +1,31 @@
+***START***
+S123456789
++4407706925374
+This is a test! Let's see if I can read one message at the time.
+This is hoing to be fun! LOL!
+***END***
+
+***START***
+E987654321
+m.picchillo@pritonmail.com
+Test Email
+This is a test for an email!
+Link to LinkedIn: https://www.linkedin.com/in/mpicchillo
+***END***
+
+***START***
+T147258369
+@Mapko_Brig_Scot
+This is a fake Twitter message.
+Working on a #CourseWork at @ComputingNapier
+***END***
+
+***START***
+E785258111
+thiemail@yahoo.com
+SIR 20/11/19
+23-101-13
+Sport Injury
+I am getting so used to stay hours on at the PC that I am injured myself thinking of going to the gym.
+CU Marco.
+***END***

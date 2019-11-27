@@ -1,10 +1,12 @@
 ﻿namespace MessageFiltering_EustonLeisure
 {
+    //This class will create objects that contain SIR List Entries.
     class SIRListEntry
     {
-        public string Code { get; set; }
-        public string IncidentNature { get; set; }
+        public string Code { get; set; } //Center Code
+        public string IncidentNature { get; set; } //Nature of Incident
 
+        //Costructor
         public SIRListEntry(string code, string incident)
         {
             Code = code;

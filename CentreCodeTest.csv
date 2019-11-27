@@ -1,0 +1,7 @@
+code,expected
+01-123-12,TRUE
+81-523-89,TRUE
+0-0-0,FALSE
+123-22-523,FALSE
+eleven-ten-twenty,FALSE
+,FALSE

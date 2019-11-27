@@ -1,0 +1,11 @@
+hashtag,expected
+#picture,TRUE
+#programming,TRUE
+#visualstudio,TRUE
+#AskMe,TRUE
+opo#hy,FALSE
+09jnfb,FALSE
+,FALSE
+123521,FALSE
+@hashtag,FALSE
+/hash#,FALSE

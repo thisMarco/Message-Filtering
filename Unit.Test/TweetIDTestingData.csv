@@ -1,0 +1,7 @@
+id,expected
+@marco,TRUE
+@EdinburghNapier,TRUE
+@123456789abcdefghi,FALSE
+@a,TRUE
+@?/;ltp,FALSE
+@,FALSE

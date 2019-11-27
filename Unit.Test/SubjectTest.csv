@@ -1,0 +1,6 @@
+subject,expected
+SIR 21/03/19,TRUE
+Re: Question,TRUE
+Report #12,TRUE
+abcdefghilmnopqrstuvz,FALSE
+,FALSE

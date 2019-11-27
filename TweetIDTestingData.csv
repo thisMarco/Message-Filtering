@@ -1,0 +1,11 @@
+id,expected
+@marco,TRUE
+@WestLoCollege,TRUE
+@EdinburghNapier,TRUE
+@enucs,TRUE
+@123456789abcdefghi,FALSE
+@a,FALSE
+@?/;ltp,FALSE
+@,FALSE
+lo@mar,FALSE
+~testID,FALSE

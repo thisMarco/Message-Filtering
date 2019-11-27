@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessageFiltering_EustonLeisure"
         mc:Ignorable="d"
-        Title="DisplyMessage" Height="320" Width="800" ResizeMode="NoResize" WindowStyle="None">
+        Title="DisplyMessage" Height="320" Width="800" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid Background="#FF2768BA">
         <TextBlock x:Name="tblockHeader" HorizontalAlignment="Left" Margin="9,56,0,0" TextWrapping="Wrap" Text="Header:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>
         <TextBlock x:Name="tblockSender" HorizontalAlignment="Left" Margin="9,87,0,0" TextWrapping="Wrap" Text="Sender:" VerticalAlignment="Top" Width="110" FontWeight="Bold" TextAlignment="Right" Foreground="White"/>

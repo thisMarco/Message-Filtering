@@ -1,0 +1,34 @@
+{
+  "S000000001": {
+    "Header": "S000000001",
+    "Body": "+4407701523652\nYour booking reference is #254."
+  },
+  "S000000002": {
+    "Header": "S000000002",
+    "Body": "+4407706123321\nM8 are we still meeting at 3PM? ASAP"
+  },
+  "E100000001": {
+    "Header": "E100000001",
+    "Body": "admission@napier.ac.uk\nOpen Day\nOn the 21st of December we will have an open day at our offices.\n\nTo book you place please visit: https://www.napier.ac.uk/openday/book/\n\nTeamNapier"
+  },
+  "E100000002": {
+    "Header": "E100000002",
+    "Body": "billing@symantec.couk\nSubscription Renewed\nhttps://renew.norton.com/ Your renewed plan will end on 31/12/2020. AAP Symantec"
+  },
+  "E200000001": {
+    "Header": "E200000001",
+    "Body": "security@napier.ac.uk\nSIR 18/11/19\n10-852-01\nCustomer Attack\nA customer has been attacked while leaving the office.\nI have attached a video of the CC cameras: https://www.youtube.com/\n\nMarco."
+  },
+  "E200000002": {
+    "Header": "E200000002",
+    "Body": "cybersec@napier.ac.uk\nSIR 19/11/19\n11-853-01\nPersonal Info Leak\nWe got hacked. We opened this link http://clickforfree1000pound.hack and a virus was installed on the PC. I am terminating my contracttoday.\n\nGL/AF Marco."
+  },
+  "T000000220": {
+    "Header": "T000000220",
+    "Body": "@thisMarco\n#MondayMotivation Today it's a day off!"
+  },
+  "T000000221": {
+    "Header": "T000000221",
+    "Body": "@thisMarco\n#MondayMotivation #HolidayTime Having lunch with @someoneElse"
+  }
+}

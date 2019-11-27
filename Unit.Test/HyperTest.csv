@@ -1,0 +1,7 @@
+link,expected
+https://www.google.com/,TRUE
+https://www.napier.ac.uk/,TRUE
+facebook.com,FALSE
+,FALSE
+m.picchillo@yahoo.com,FALSE
+023282,FALSE

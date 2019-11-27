@@ -1,0 +1,7 @@
+hashtag,expected
+#picture,TRUE
+#programming,TRUE
+09jnfb,FALSE
+123521,FALSE
+@hashtag,FALSE
+/hash#,FALSE

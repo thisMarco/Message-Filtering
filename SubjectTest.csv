@@ -1,0 +1,7 @@
+"subject,expected",expected
+"SIR 21/03/19,TRUE",TRUE
+"Re: Question,TRUE",TRUE
+"Report #12,TRUE",FALSE
+"abcdefghilmnopqrstuvz,FALSE",FALSE
+",FALSE",FALSE
+,FALSE
