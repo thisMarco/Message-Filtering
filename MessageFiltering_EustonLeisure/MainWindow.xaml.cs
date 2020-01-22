@@ -215,27 +215,31 @@ namespace MessageFiltering_EustonLeisure
                 {
                     //If message does not contain a SIR, this should be a standard email.
                     string subject = new StringReader(b).ReadLine(); //Contains the email subject
-                    b = EditBody(b, subject); //Check if the subject length limit is met
-                
-                    if (subject.Length <= 20 && subject.Length > 0)
+                    if (!string.IsNullOrWhiteSpace(subject))
                     {
-                        if (MessageLegthLimit(b, 1028))
-                        {
-                            ExpandAbbreviation(ref b, abbreviations, nOfAbbreviations); //Expanding abbreviations
-                            QuarantineList(b, ref quarantineed, ref nOfQuarantined); //Adding URLs to Quarantined list
-                            QuarantineURLs(ref b); //Replacing URLs with "<URL Quarantineed>"
+                        b = EditBody(b, subject); //Check if the subject length limit is met
 
-                            messagesList.Add(h, new Email(h, senderEmail, subject, b)); //Adding processed message to dictionary
-                            messagesUnsaved = true;
-                            lboxMessages.Items.Refresh();
-                            return true;
+                        if (subject.Length <= 20 && subject.Length > 0)
+                        {
+                            if (MessageLegthLimit(b, 1028))
+                            {
+                                ExpandAbbreviation(ref b, abbreviations, nOfAbbreviations); //Expanding abbreviations
+                                QuarantineList(b, ref quarantineed, ref nOfQuarantined); //Adding URLs to Quarantined list
+                                QuarantineURLs(ref b); //Replacing URLs with "<URL Quarantineed>"
+
+                                messagesList.Add(h, new Email(h, senderEmail, subject, b)); //Adding processed message to dictionary
+                                messagesUnsaved = true;
+                                lboxMessages.Items.Refresh();
+                                return true;
+                            }
+                            else
+                                BodyOutOfLimit(1028);
                         }
                         else
-                            BodyOutOfLimit(1028);
-                        
+                            MessageBox.Show("Invalid Subject!\nSubject must be <= 20 characters.", "Invalid Subject", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
-                        MessageBox.Show("Invalid Subject!\nSubject must be <= 20 characters.", "Invalid Subject", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Invalid Body!", "Invalid Body", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
@@ -311,8 +315,12 @@ namespace MessageFiltering_EustonLeisure
         //This method removes empty lines.
         private void RemoveEmptyLine(ref string message)
         {
-            while (message[0] == '\n' || message[0] == '\r')
-                message = message.Remove(0, 1);
+            if (!String.IsNullOrWhiteSpace(message))
+            {
+                while ((message[0] == '\n' || message[0] == '\r'))
+                    message = message.Remove(0, 1);
+            }
+            
         }
 
         //This method return a string that matched a regex pattern
