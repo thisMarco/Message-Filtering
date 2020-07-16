@@ -88,20 +88,25 @@ namespace MessageFiltering_EustonLeisure
         //This method start the Message Process when the button has been pressed
         private void BtnProcess_Click(object sender, RoutedEventArgs e)
         {
-            if (RegexCheck("((?:[S|E|T]+[0-9]{9}))", tboxHeader.Text.ToUpper())) //Validating Header
+            if (!string.IsNullOrEmpty(tboxHeader.Text) && !string.IsNullOrEmpty(tboxBody.Text))
             {
-                if (ProcessMessage(tboxHeader.Text, tboxBody.Text)) //Process Message
+                if (RegexCheck("((?:[S|E|T]+[0-9]{9}))", tboxHeader.Text.ToUpper())) //Validating Header
                 {
-                    //If the message has been correctly processed, the process result is displayed in a new window
-                    //the two textboxes ar emptied.
-                    DisplayMessage displayMessage = new DisplayMessage(messagesList[tboxHeader.Text.ToUpper()]);
-                    displayMessage.ShowDialog();
-                    tboxHeader.Text = string.Empty;
-                    tboxBody.Text = string.Empty;
+                    if (ProcessMessage(tboxHeader.Text, tboxBody.Text)) //Process Message
+                    {
+                        //If the message has been correctly processed, the process result is displayed in a new window
+                        //the two textboxes ar emptied.
+                        DisplayMessage displayMessage = new DisplayMessage(messagesList[tboxHeader.Text.ToUpper()]);
+                        displayMessage.ShowDialog();
+                        tboxHeader.Text = string.Empty;
+                        tboxBody.Text = string.Empty;
+                    }
                 }
+                else
+                    MessageBox.Show("Invalid Header Format!");
             }
             else
-                MessageBox.Show("Invalid Header Format!");
+                MessageBox.Show("Missing Header or Body");
         }
 
         //This method process the message
